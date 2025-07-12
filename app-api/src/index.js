@@ -1,9 +1,9 @@
 import express from 'express';
+import {PORT} from './config.js';
 import pcwRoutes from './routes/pcws.routes.js';
 import morgan from 'morgan';
 import { swaggerUi, swaggerDocs } from './swagger.js';
 import cors from 'cors';
-import serverless from 'serverless-http'; // 👈 NUEVO
 
 const app = express();
 
@@ -14,5 +14,7 @@ app.use(cors());
 app.use(pcwRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Exporta como handler para serverless
-export const handler = serverless(app);
+// Start the server
+app.listen(PORT, () => {
+  console.log('Server is running on http://localhost:'+ PORT);
+});
