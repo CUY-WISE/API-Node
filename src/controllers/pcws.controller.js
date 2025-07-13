@@ -3,7 +3,7 @@ import { pool } from "../db.js";
 // Funciones para obtener los datos de las tablas de la base de datos
 export const getAnimales = async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM "Animales";');
+        const result = await pool.query('SELECT * FROM "animales";');
         res.json(result.rows);
     } catch (error) {
         console.error(error.message);
@@ -14,7 +14,7 @@ export const getAnimales = async (req, res) => {
 // Funciones para obtener los datos de las tablas de la base de datos
 export const getMediciones = async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM "Mediciones";');
+        const result = await pool.query('SELECT * FROM "medicion";');
         res.json(result.rows);
     } catch (error) {
         console.error(error.message);
@@ -25,7 +25,7 @@ export const getMediciones = async (req, res) => {
 // Funciones para obtener los datos de las tablas de la base de datos
 export const getEventos = async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM "Eventos";');
+        const result = await pool.query('SELECT * FROM "evento";');
         res.json(result.rows);
     } catch (error) {
         console.error(error.message);
@@ -37,7 +37,7 @@ export const getEventos = async (req, res) => {
 export const getAnimalById = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await pool.query('SELECT * FROM "Animales" WHERE id = $1;', [id]);
+        const result = await pool.query('SELECT * FROM "animales" WHERE id = $1;', [id]);
         res.json(result.rows);
     } catch (error) {
         console.error(error.message);
@@ -49,7 +49,7 @@ export const getAnimalById = async (req, res) => {
 export const getMedicionById = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await pool.query('SELECT * FROM "Mediciones" WHERE id = $1;', [id]);
+        const result = await pool.query('SELECT * FROM "medicion" WHERE id = $1;', [id]);
         res.json(result.rows);
     } catch (error) {
         console.error(error.message);
@@ -60,7 +60,7 @@ export const getMedicionById = async (req, res) => {
 export const getEventoById = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await pool.query('SELECT * FROM "Eventos" WHERE id = $1;', [id]);
+        const result = await pool.query('SELECT * FROM "evento" WHERE id = $1;', [id]);
         res.json(result.rows);
     } catch (error) {
         console.error(error.message);
@@ -73,7 +73,7 @@ export const getDistribucionRazas = async (req, res) => {
     try {
         const result = await pool.query(`
             SELECT raza, COUNT(*) as cantidad
-            FROM "Animales"
+            FROM "animales"
             GROUP BY raza;
         `);
         res.json(result.rows);
@@ -88,7 +88,7 @@ export const getAnimalesActivosInactivos = async (req, res) => {
     try {
         const result = await pool.query(`
             SELECT activo, COUNT(*) as cantidad
-            FROM "Animales"
+            FROM "animales"
             GROUP BY activo;
         `);
         res.json(result.rows);
@@ -103,7 +103,7 @@ export const getEvolucionPesoPorAnimal = async (req, res) => {
     try {
         const result = await pool.query(`
             SELECT animal_id, fecha_medicion, peso
-            FROM "Mediciones"
+            FROM "medicion"
             ORDER BY animal_id, fecha_medicion;
         `);
         res.json(result.rows);
@@ -118,7 +118,7 @@ export const getEventosPorTipo = async (req, res) => {
     try {
         const result = await pool.query(`
             SELECT tipo_evento, COUNT(*) as cantidad
-            FROM "Eventos"
+            FROM "evento"
             GROUP BY tipo_evento;
         `);
         res.json(result.rows);
@@ -133,7 +133,7 @@ export const getMedicionesPorAnimal = async (req, res) => {
     try {
         const result = await pool.query(`
             SELECT animal_id, COUNT(*) as cantidad
-            FROM "Mediciones"
+            FROM "medicion"
             GROUP BY animal_id;
         `);
         res.json(result.rows);
@@ -148,7 +148,7 @@ export const getAnimalesPorMesAnio = async (req, res) => {
     try {
         const result = await pool.query(`
             SELECT TO_CHAR(fecha_registro, 'YYYY-MM') as mes_anio, COUNT(*) as cantidad
-            FROM "Animales"
+            FROM "animales"
             GROUP BY mes_anio
             ORDER BY mes_anio;
         `);
@@ -164,7 +164,7 @@ export const getRelacionPesoFecha = async (req, res) => {
     try {
         const result = await pool.query(`
             SELECT peso, fecha_medicion
-            FROM "Mediciones";
+            FROM "medicion";
         `);
         res.json(result.rows);
     } catch (error) {
@@ -178,8 +178,8 @@ export const getPromedioPesoPorRaza = async (req, res) => {
     try {
         const result = await pool.query(`
             SELECT a.raza, AVG(m.peso) as peso_promedio
-            FROM "Animales" a
-            JOIN "Mediciones" m ON a.id = m.animal_id
+            FROM "animales" a
+            JOIN "medicion" m ON a.id = m.animal_id
             GROUP BY a.raza;
         `);
         res.json(result.rows);
